@@ -1,13 +1,210 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="pt-BR">
 <head>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <title>Hello, World!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melhores Plays Gamer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: backgroundShift 15s infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% {background-position: 0 0;}
+            100% {background-position: 100% 100%;}
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        header h1 {
+            font-size: 2em;
+            color: #ff4757;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #ff4757, 0 0 10px #ff6b81, 0 0 20px #ff4757;}
+            to { text-shadow: 0 0 20px #ff6b81, 0 0 30px #ff4757, 0 0 40px #ff6b81;}
+        }
+
+        /* Formulário de postagem */
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ff4757;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #ff6b81;
+        }
+
+        .form-container input, 
+        .form-container select, 
+        .form-container textarea, 
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .form-container button {
+            background: #ff4757;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .form-container button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ff6b81;
+        }
+
+        /* Cards das plays */
+        .plays-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .play-card {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #ff4757;
+            border-radius: 15px;
+            overflow: hidden;
+            transform: scale(1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .play-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff4757;
+        }
+
+        .play-card img {
+            width: 100%;
+            display: block;
+        }
+
+        .play-card h3, .play-card p {
+            padding: 10px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #aaa;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
 </head>
 <body>
-  <h1>
-    Hello, World!
-  </h1>
+
+    <header>
+        <h1>Melhores Plays Gamer</h1>
+        <p>Compartilhe suas melhores jogadas com a comunidade!</p>
+    </header>
+
+    <section class="form-container">
+        <h2>Poste sua Play</h2>
+        <form id="playForm">
+            <input type="text" id="playerName" placeholder="Seu nome" required>
+            <select id="gameSelect" required>
+                <option value="">Selecione o jogo</option>
+                <option value="League of Legends">League of Legends</option>
+                <option value="Fortnite">Fortnite</option>
+                <option value="Valorant">Valorant</option>
+                <option value="Minecraft">Minecraft</option>
+            </select>
+            <input type="url" id="videoURL" placeholder="URL da sua play (YouTube, Twitch, etc.)" required>
+            <textarea id="description" placeholder="Descrição da play" rows="3"></textarea>
+            <button type="submit">Postar Play</button>
+        </form>
+    </section>
+
+    <section class="plays-container" id="playsContainer">
+        <!-- Plays enviadas aparecerão aqui -->
+    </section>
+
+    <footer>
+        &copy; 2025 Melhores Plays Gamer - Todos os direitos reservados
+    </footer>
+
+    <script>
+        const form = document.getElementById('playForm');
+        const playsContainer = document.getElementById('playsContainer');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const playerName = document.getElementById('playerName').value;
+            const game = document.getElementById('gameSelect').value;
+            const videoURL = document.getElementById('videoURL').value;
+            const description = document.getElementById('description').value;
+
+            // Criação do card da play
+            const card = document.createElement('div');
+            card.classList.add('play-card');
+
+            // Embed do vídeo (iframe do YouTube)
+            const embed = document.createElement('iframe');
+            embed.src = videoURL.replace("watch?v=", "embed/");
+            embed.width = "100%";
+            embed.height = "180";
+            embed.frameBorder = "0";
+            embed.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            embed.allowFullscreen = true;
+
+            const title = document.createElement('h3');
+            title.textContent = `${playerName} - ${game}`;
+
+            const desc = document.createElement('p');
+            desc.textContent = description;
+
+            card.appendChild(embed);
+            card.appendChild(title);
+            card.appendChild(desc);
+
+            playsContainer.prepend(card); // Adiciona no topo
+
+            // Limpar formulário
+            form.reset();
+        });
+    </script>
+
 </body>
 </html>
